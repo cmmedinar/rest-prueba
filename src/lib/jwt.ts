@@ -1,17 +1,23 @@
 import jwt from 'jsonwebtoken'
 import { UserDTO, UserTokenPayload } from '../models/dto/UserDTO'
 
-const secret = process.env.JWT_SECRET || 'secret'
+const secret = process.env.JWT_SECRET as string
+
+if (!secret) {
+  throw new Error('JWT Secret not found on env variables')
+}
 
 export function generateToken(user: UserDTO): string {
   return jwt.sign(
-    { id: user.id, email: user.email },
+    { sub: user.id, email: user.email },
     secret,
     { expiresIn: '7d' }
   )
 }
 
+
 export function verifyToken(token: string): UserTokenPayload {
-  const verified = jwt.verify(token, secret)
-  return verified as UserTokenPayload
+  const verify = jwt.verify(token, secret)
+  return verify as unknown as UserTokenPayload
 }
+

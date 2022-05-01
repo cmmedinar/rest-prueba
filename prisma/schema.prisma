@@ -9,24 +9,25 @@ datasource db {
   referentialIntegrity = "prisma"
 }
 
-model User {
-  id        Int       @id @default(autoincrement())
-  email     String    @unique @db.VarChar(255)
-  password  String    @db.VarChar(255)
-  pets      Pet[]
+model Task {
+  id      Int     @id @default(autoincrement())
+  title   String  @db.VarChar(50)
+  content String  @db.VarChar(255)
+  done    Boolean @default(false)
+  user    User?   @relation(fields: [userId], references: [id])
+  userId  Int?
 
-  @@map("users")
+  @@unique([title, userId])
+  @@map("tasks")
 }
 
-model Pet {
-  id       Int        @id @default(autoincrement())
-  name     String     @db.VarChar(60)
-  type     String     @db.VarChar(60)
-  birth    DateTime   @db.Date()
-  photo    String?    @db.VarChar(255)
-  user     User?      @relation(fields: [userId], references: [id])
-  userId   Int?
+model User {
+  id        Int    @id @default(autoincrement())
+  firstName String @db.VarChar(100)
+  lastName  String @db.VarChar(100)
+  email     String @unique @db.VarChar(255)
+  password  String @db.VarChar(255)
+  tasks     Task[]
 
-  @@unique([name, userId])
-  @@map("pets")
+  @@map("users")
 }
