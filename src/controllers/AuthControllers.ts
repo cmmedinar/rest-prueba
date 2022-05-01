@@ -17,16 +17,21 @@ export default class AuthController {
     }  
     const repository = new UserRepository()
 
+    try {
     const userFromDb = await repository.findByEmail(credentials.email)
 
     if (!userFromDb || !bcrytp.compareSync(credentials.password, userFromDb.password)) {
       res.status(401).json({ message: 'Invalid credentials'})
       return
-    }
-
+      }
     const token = generateToken(userFromDb)
-
     res.json({ token })
+
+    } catch (error) {
+      console.log(error)
+      res.status(500).json({ message: 'Something went wrong' })
+      }
+    
 
   }
 
@@ -48,7 +53,6 @@ export default class AuthController {
       const newUser = await repository.create({ ...user, password: hashedPassword})
       res.status(201).json(newUser)
     } catch (error) {
-      console.log(error.code)
       if (error.code === 'P2002') {
         res.status(409).json({ message: 'User alredy exists ' })
         return

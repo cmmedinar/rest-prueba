@@ -10,4 +10,9 @@ const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use((0, morgan_1.default)('dev'));
 app.use('/api/v1', routes_1.default);
+app.use((_req, res) => {
+    res.status(404).json({
+        message: 'Not found'
+    });
+});
 exports.default = app;

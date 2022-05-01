@@ -11,7 +11,7 @@ export default class TaskController {
 
     try {
       const tasks: TaskDTO[] = await repository.findAll()
-    res.json(tasks)
+      res.json(tasks)
     } catch (error) {
       console.log(error)
       res.status(500).json({ message: 'Something went wrong' })

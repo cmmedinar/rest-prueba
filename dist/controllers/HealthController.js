@@ -5,8 +5,7 @@ class HealthController {
         this.info = (_req, res) => {
             res.json({
                 name: process.env.npm_package_name,
-                version: process.env.npm_package_version,
-                description: process.env.npm_package_description
+                version: process.env.npm_package_version
             });
         };
         this.ping = (_req, res) => {
